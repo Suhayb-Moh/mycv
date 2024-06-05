@@ -8,23 +8,23 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { plainToInstance } from 'class-transformer';
 
-interface classConstructor {
-  new (...args: any[]): any;
+interface ClassConstructor {
+  new (...args: any[]): object;
 }
 
-export function Serialize(dto: classConstructor) {
-  return UseInterceptors(new ClassSerializerInterceptor(dto));
+export function Serialize(dto: ClassConstructor) {
+  return UseInterceptors(new SerializeInterceptor(dto));
 }
 
 // @UseInterceptors(ClassSerializerInterceptor)
-export class ClassSerializerInterceptor implements NestInterceptor {
+export class SerializeInterceptor implements NestInterceptor {
   constructor(private dto: any) {}
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle().pipe(
+
+  intercept(context: ExecutionContext, handler: CallHandler): Observable<any> {
+    return handler.handle().pipe(
       map((data: any) => {
         return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true,
-          enableImplicitConversion: true,
         });
       }),
     );
