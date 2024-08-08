@@ -4,9 +4,13 @@ import { Repository } from 'typeorm';
 import { Report } from './report.entity';
 import { CreateReportDto } from './dtos/create-report.dto';
 import { User } from '../users/user.entity';
+import { GetEstimateDto } from './dtos/get-estimate.dto';
 
 @Injectable()
 export class ReportsService {
+  getEstimate(query: GetEstimateDto) {
+    // Implement get estimate logic here
+  }
   constructor(@InjectRepository(Report) private repo: Repository<Report>) {}
 
   createReport(reportDto: CreateReportDto, user: User) {
