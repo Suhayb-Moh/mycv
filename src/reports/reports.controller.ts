@@ -25,6 +25,11 @@ import { GetEstimateDto } from './dtos/get-estimate.dto';
 @Controller('reports')
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
+
+  @Get()
+  getEstimate(@Query() query: GetEstimateDto) {
+    return this.reportsService.createEstimate(query);
+  }
   @Post()
   @UseGuards(AuthGaurd)
   @Serialize(ReportDto)
@@ -36,10 +41,5 @@ export class ReportsController {
   @UseGuards(AdminGuard)
   approveReport(@Param('id') id: string, @Body() body: ApprovedReportDto) {
     return this.reportsService.changeApproval(id, body.approved);
-  }
-
-  @Get('/:id')
-  getEstimate(@Query() query: GetEstimateDto) {
-    return this.reportsService.getEstimate(query);
   }
 }
